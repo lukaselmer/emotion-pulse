@@ -4,8 +4,8 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
-    <!-- from https://gist.github.com/gabrielemariotti/d23bfe583e900a4f9276
-    <uses-permission android:name="android.permission.BODY_SENSORS" /> -->
+    <!-- from https://gist.github.com/gabrielemariotti/d23bfe583e900a4f9276 -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
         android:allowBackup="true"
