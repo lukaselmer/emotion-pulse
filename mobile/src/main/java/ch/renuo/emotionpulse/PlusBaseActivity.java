@@ -24,13 +24,10 @@ public abstract class PlusBaseActivity extends Activity
 
     // A magic number we will use to know that our sign-in error resolution activity has completed
     private static final int OUR_REQUEST_CODE = 49404;
-
-    // A flag to stop multiple dialogues appearing for the user
-    private boolean mAutoResolveOnFail;
-
     // A flag to track when a connection is already in progress
     public boolean mPlusClientIsConnecting = false;
-
+    // A flag to stop multiple dialogues appearing for the user
+    private boolean mAutoResolveOnFail;
     // This is the helper object that connects to Google Play Services.
     private PlusClient mPlusClient;
 
