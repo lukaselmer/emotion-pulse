@@ -14,6 +14,8 @@ import com.parse.ParseUser;
 
 public class LogoutActivity extends Activity {
 
+    private final EmotionService mEmotionService = new EmotionService();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class LogoutActivity extends Activity {
     private void logEmotion(int heartBeat, String application, String context) {
         String message;
         try {
-            new EmotionService().store(new Emotion(heartBeat, application, context));
+            mEmotionService.store(new Emotion(heartBeat, application, context));
             message = "Sucessfully logged emotion!";
         } catch (ParseException e) {
             message = e.getLocalizedMessage();

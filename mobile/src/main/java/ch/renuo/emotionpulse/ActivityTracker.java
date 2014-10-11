@@ -14,6 +14,7 @@ import com.parse.ParseUser;
  */
 public class ActivityTracker extends AccessibilityService {
 
+    private final EmotionService mEmotionService = new EmotionService();
     private BrowserContext mBrowserContext;
 
     @Override
@@ -33,7 +34,7 @@ public class ActivityTracker extends AccessibilityService {
 
         try {
             // Now send it!
-            new EmotionService().store(new Emotion(mBrowserContext.latestPulse(), mBrowserContext.getApp(), mBrowserContext.getUrl()));
+            mEmotionService.store(new Emotion(mBrowserContext.latestPulse(), mBrowserContext.getApp(), mBrowserContext.getUrl()));
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
