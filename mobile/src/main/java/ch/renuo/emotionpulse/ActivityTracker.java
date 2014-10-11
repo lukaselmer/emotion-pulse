@@ -26,30 +26,34 @@ public class ActivityTracker  extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-        final int eventType = event.getEventType();
-        String eventText = null;
-        switch(eventType) {
-            case AccessibilityEvent.TYPE_VIEW_CLICKED:
-                eventText = "Focused: ";
-                break;
-            case AccessibilityEvent.TYPE_VIEW_FOCUSED:
-                eventText = "Focused: ";
-                break;
+        if(event.getRecordCount() > 0 || event.getSource() != null) {
+            Log.d(ACCESSIBILITY_SERVICE, event.toString());
         }
 
-        eventText = eventText + event.getContentDescription();
-
-        Log.d(ACCESSIBILITY_SERVICE, eventText);
+        // Now send it!
 
     }
 
     @Override
     public void onServiceConnected() {
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
-        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
+        info.eventTypes = AccessibilityEvent.TYPE_VIEW_SCROLLED|AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED|AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
         info.notificationTimeout = 0;
-        info.flags = AccessibilityServiceInfo.DEFAULT;
+        info.packageNames = new String[] {"com.android.browser", "com.google.android.brower", "com.android.chrome"};
+
+        // Set the type of feedback your service will provide.
+        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
+
+        // Default services are invoked only if no package-specific ones are present
+        // for the type of AccessibilityEvent generated.  This service *is*
+        // application-specific, so the flag isn't necessary.  If this was a
+        // general-purpose service, it would be worth considering setting the
+        // DEFAULT flag.
+
+        // info.flags = AccessibilityServiceInfo.DEFAULT;
+
+        info.notificationTimeout = 100;
+
         setServiceInfo(info);
     }
 

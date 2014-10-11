@@ -14,12 +14,19 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <service
-            android:name=".ActivityTracker"
-            android:exported="true">
+            android:name="ch.renuo.emotionpulse.ActivityTracker"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:enabled="true"
+            android:exported="false"
+            android:canRetrieveWindowContent="true"
+            >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
+
+        <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -40,5 +47,6 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
 </manifest>
