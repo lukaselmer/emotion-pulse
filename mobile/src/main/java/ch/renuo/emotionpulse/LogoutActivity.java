@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LogoutActivity extends Activity {
@@ -16,19 +17,45 @@ public class LogoutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ParseInitializer.init(this);
+
         setContentView(R.layout.activity_logout);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.action_logout_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
-
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                logout();
             }
         });
+
+        Button mLogEmotionButton = (Button) findViewById(R.id.action_log_emotion_button);
+        mLogEmotionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logEmotion(77, "application", "context");
+            }
+        });
+    }
+
+    private void logEmotion(int heartBeat, String application, String context) {
+        String message;
+        try {
+            new EmotionService().store(new Emotion(heartBeat, application, context));
+            message = "Sucessfully logged emotion!";
+        } catch (ParseException e) {
+            message = e.getLocalizedMessage();
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void logout() {
+        ParseUser.logOut();
+        Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
 

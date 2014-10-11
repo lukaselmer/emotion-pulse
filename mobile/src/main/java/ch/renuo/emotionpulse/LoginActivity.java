@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -58,8 +57,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.initialize(this, "miopZzhX2hAKGjpr5O7PPi0IqZGGMlMRNyKtql8F", "OqJ7Xzsn63jCbeC4Aa1amh6dTe5PduYPiYuhg7Qf");
-        ParseUser.enableAutomaticUser();
+        ParseInitializer.init(this);
 
         if (ParseUser.getCurrentUser().isAuthenticated() && ParseUser.getCurrentUser().getEmail() != null) {
             loginSuccessful();
