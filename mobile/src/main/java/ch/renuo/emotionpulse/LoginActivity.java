@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -59,6 +60,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         Parse.initialize(this, "miopZzhX2hAKGjpr5O7PPi0IqZGGMlMRNyKtql8F", "OqJ7Xzsn63jCbeC4Aa1amh6dTe5PduYPiYuhg7Qf");
         ParseUser.enableAutomaticUser();
+
+        if (ParseUser.getCurrentUser().isAuthenticated() && ParseUser.getCurrentUser().getEmail() != null) {
+            loginSuccessful();
+            return;
+        }
 
         setContentView(R.layout.activity_login);
 
@@ -246,6 +252,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailView.setAdapter(adapter);
     }
 
+    private void loginSuccessful() {
+        Intent intent = new Intent(getApplicationContext(), LogoutActivity.class);
+        startActivity(intent);
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -319,14 +329,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected void onPostExecute(final String message) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
 
             mAuthTask = null;
             showProgress(false);
 
             if (!error) {
-                finish();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                loginSuccessful();
             } else {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

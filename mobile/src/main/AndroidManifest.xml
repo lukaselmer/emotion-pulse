@@ -8,30 +8,32 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:exported="true"
-            android:name="LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateHidden">
-        </activity>
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <service
-            android:name="ActivityTracker"
+            android:name=".ActivityTracker"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
 
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".LogoutActivity"
+            android:label="@string/title_activity_logout"
+            android:noHistory="true"></activity>
     </application>
 
 
     <!-- from https://gist.github.com/gabrielemariotti/d23bfe583e900a4f9276 -->
     <uses-permission android:name="android.permission.BODY_SENSORS" />
-
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
