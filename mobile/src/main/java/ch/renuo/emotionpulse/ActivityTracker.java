@@ -25,10 +25,10 @@ public class ActivityTracker extends AccessibilityService {
             Toast.makeText(getApplicationContext(), "Please login to the Emotion Pulse app", Toast.LENGTH_LONG);
             return;
         }
-
+        PulseSource p = new PulseSource();
         try {
             // Now send it!
-            new EmotionService().store(new Emotion(PulseSource.getPulse(), event.getPackageName().toString(), ContextSource.getContext()));
+            new EmotionService().store(new Emotion(p.getPulse(), event.getPackageName().toString(), ContextSource.getContext()));
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
