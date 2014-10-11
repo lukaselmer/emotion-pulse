@@ -2,7 +2,6 @@ package ch.renuo.emotionpulse;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
@@ -15,20 +14,26 @@ import com.parse.ParseUser;
  */
 public class ActivityTracker extends AccessibilityService {
 
+    private BrowserContext mBrowserContext;
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event.getRecordCount() > 0 || event.getSource() != null) {
-            Log.d(ACCESSIBILITY_SERVICE, event.toString());
-        }
+        if (mBrowserContext == null) mBrowserContext = new BrowserContext();
 
-        if (!ParseUser.getCurrentUser().isAuthenticated() || ParseUser.getCurrentUser().getEmail() == null){
+        mBrowserContext.updateContext(event);
+
+        ParseInitializer.init(getApplicationContext());
+
+        if (!ParseUser.getCurrentUser().isAuthenticated() || ParseUser.getCurrentUser().getEmail() == null) {
             Toast.makeText(getApplicationContext(), "Please login to the Emotion Pulse app", Toast.LENGTH_LONG);
             return;
         }
 
+        if (!mBrowserContext.hasUrl()) return;
+
         try {
             // Now send it!
-            new EmotionService().store(new Emotion(PulseSource.getPulse(), event.getPackageName().toString(), ContextSource.getContext()));
+            new EmotionService().store(new Emotion(mBrowserContext.latestPulse(), mBrowserContext.getApp(), mBrowserContext.getUrl()));
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
@@ -38,7 +43,7 @@ public class ActivityTracker extends AccessibilityService {
     @Override
     public void onServiceConnected() {
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.eventTypes = AccessibilityEvent.TYPE_VIEW_SCROLLED | AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
+        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
         info.notificationTimeout = 0;
         info.packageNames = new String[]{"com.android.browser", "com.google.android.browser", "com.android.chrome"};
 

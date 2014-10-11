@@ -25,4 +25,13 @@ public class Emotion {
     public String getContext() {
         return context;
     }
+
+    @Override
+    public String toString() {
+        return "Emotion{" +
+                "heartBeat=" + heartBeat +
+                ", application='" + application + '\'' +
+                ", context='" + context + '\'' +
+                '}';
+    }
 }
