@@ -31,6 +31,7 @@ public class ActivityTracker  extends AccessibilityService {
         }
 
         // Now send it!
+        new EmotionService().store(new Emotion(PulseSource::getPulse(), event.getPackageName(), ContextSource::getContext()));
 
     }
 
