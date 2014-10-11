@@ -3,15 +3,12 @@ package ch.renuo.emotionpulse;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,10 +26,10 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.parse.Parse;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * A login screen that offers login via email/password and via Google+ sign in.
@@ -68,6 +65,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Parse.initialize(this, "miopZzhX2hAKGjpr5O7PPi0IqZGGMlMRNyKtql8F", "OqJ7Xzsn63jCbeC4Aa1amh6dTe5PduYPiYuhg7Qf");
+
         setContentView(R.layout.activity_login);
 
         // Find the Google+ sign in button.
