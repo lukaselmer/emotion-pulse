@@ -244,6 +244,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     protected void updateConnectButtonState() {
+        if (mSignOutButtons == null) return;
+
         //TODO: Update this logic to also handle the user logged in by email.
         boolean connected = getPlusClient().isConnected();
 
