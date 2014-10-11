@@ -13,7 +13,7 @@ public class EmotionService {
         o.put("heartBeat", emotion.getHeartBeat());
         o.put("application", emotion.getApplication());
         o.put("context", emotion.getContext());
-        o.put("userId", ParseUser.getCurrentUser().getRelation());
+        o.put("userId", ParseUser.getCurrentUser());
         o.save();
     }
 }
