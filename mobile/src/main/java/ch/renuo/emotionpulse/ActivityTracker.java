@@ -4,8 +4,10 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 
 /**
@@ -19,10 +21,16 @@ public class ActivityTracker extends AccessibilityService {
             Log.d(ACCESSIBILITY_SERVICE, event.toString());
         }
 
+        if (!ParseUser.getCurrentUser().isAuthenticated() || ParseUser.getCurrentUser().getEmail() == null){
+            Toast.makeText(getApplicationContext(), "Please login to the Emotion Pulse app", Toast.LENGTH_LONG);
+            return;
+        }
+
         try {
             // Now send it!
             new EmotionService().store(new Emotion(PulseSource.getPulse(), event.getPackageName().toString(), ContextSource.getContext()));
         } catch (ParseException e) {
+            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
         }
     }
