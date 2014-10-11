@@ -22,9 +22,7 @@ public class ActivityTracker extends AccessibilityService {
         if (mBrowserContext == null) mBrowserContext = new BrowserContext();
 
         mBrowserContext.updateContext(event);
-
-        PulseSource p = new PulseSource();
-
+        PulseSource p = new PulseSource(getApplicationContext());
         ParseInitializer.init(getApplicationContext());
 
         if (!ParseUser.getCurrentUser().isAuthenticated() || ParseUser.getCurrentUser().getEmail() == null) {
@@ -33,6 +31,7 @@ public class ActivityTracker extends AccessibilityService {
         }
 
         if (!mBrowserContext.hasUrl()) return;
+
 
         try {
             // Now send it!

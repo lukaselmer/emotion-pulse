@@ -24,19 +24,20 @@ limitations under the License.
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/sample_text"
-        android:text="@string/app_name"
+        android:id="@+id/rate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="34sp" android:text="89" android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"/>
 
-    <ScrollView
+    <TextView
+        android:id="@+id/accuracy"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ch.renuo.emotionpulse.common.logger.LogView
-            android:id="@+id/sample_logview"
-            android:text="@string/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+        android:layout_height="wrap_content" android:text="Accuracy: 1" android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="Sensor Information" />
 
 </RelativeLayout>
