@@ -31,10 +31,16 @@ public class BrowserContext {
     }
 
     public void updateContext(AccessibilityEvent event) {
-        if (event.getText().size() == 1 && !event.getText().toString().equals("Browser") && !event.getText().toString().equals("Chrome") && !event.getText().toString().equals("http://Chrome")) {
-            setUrl(event.getText().get(0).toString());
+
+        try {
+
+            if (event.getText().size() == 1 && !event.getText().toString().equals("Browser") && !event.getText().toString().equals("Chrome") && !event.getText().toString().equals("http://Chrome")) {
+                setUrl(event.getText().get(0).toString());
+                app = event.getPackageName().toString();
+
+            }
+        } catch (Exception ex) {
         }
-        app = event.getPackageName().toString();
     }
 
     public String getApp() {

@@ -1,6 +1,5 @@
 package ch.renuo.emotionpulse;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,16 +7,8 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Random;
@@ -91,8 +82,11 @@ public class PulseProvider implements MessageApi.MessageListener {
 //                Log.d(HEART_RATE_KEY, dataItemResult.getDataItem().toString());
 //            }
 //        });
-
-        rate = rate + (pulseSensor.nextInt(3)-1);
+        try {
+            rate = rate + (pulseSensor.nextInt(3) - 1);
+        } catch (Exception ex) {
+            rate = 90;
+        }
         return rate;
     }
 
