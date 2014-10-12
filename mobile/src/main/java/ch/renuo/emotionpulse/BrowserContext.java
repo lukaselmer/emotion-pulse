@@ -31,7 +31,7 @@ public class BrowserContext {
     }
 
     public void updateContext(AccessibilityEvent event) {
-        if (event.getText().size() == 1 && !event.getText().toString().equals("Browser")) {
+        if (event.getText().size() == 1 && !event.getText().toString().equals("Browser") && !event.getText().toString().equals("Chrome")) {
             setUrl(event.getText().get(0).toString());
         }
         app = event.getPackageName().toString();
