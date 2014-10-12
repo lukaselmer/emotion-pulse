@@ -40,8 +40,4 @@ public class BrowserContext {
     public String getApp() {
         return app;
     }
-
-    public int latestPulse() {
-        return PulseSource.getPulse();
-    }
 }

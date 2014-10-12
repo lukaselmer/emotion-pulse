@@ -16,13 +16,14 @@ public class ActivityTracker extends AccessibilityService {
 
     private final EmotionService mEmotionService = new EmotionService();
     private BrowserContext mBrowserContext;
+    private PulseProvider pulseProvider;
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (mBrowserContext == null) mBrowserContext = new BrowserContext();
+        if (pulseProvider == null) pulseProvider = new PulseProvider(getApplicationContext());
 
         mBrowserContext.updateContext(event);
-        PulseSource p = new PulseSource(getApplicationContext());
         ParseInitializer.init(getApplicationContext());
 
         if (!ParseUser.getCurrentUser().isAuthenticated() || ParseUser.getCurrentUser().getEmail() == null) {
@@ -35,7 +36,7 @@ public class ActivityTracker extends AccessibilityService {
 
         try {
             // Now send it!
-            mEmotionService.store(new Emotion(p.getPulse(), mBrowserContext.getApp(), mBrowserContext.getUrl()));
+            mEmotionService.store(new Emotion(pulseProvider.getPulse(), mBrowserContext.getApp(), mBrowserContext.getUrl()));
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
@@ -61,7 +62,6 @@ public class ActivityTracker extends AccessibilityService {
         // info.flags = AccessibilityServiceInfo.DEFAULT;
 
         info.notificationTimeout = 100;
-
         setServiceInfo(info);
     }
 

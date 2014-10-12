@@ -10,14 +10,20 @@ package ch.renuo.emotionpulse;
         import android.util.Log;
         import android.widget.TextView;
 
+        import com.google.android.gms.common.ConnectionResult;
+        import com.google.android.gms.common.api.GoogleApiClient;
+        import com.google.android.gms.common.api.PendingResult;
+        import com.google.android.gms.common.api.ResultCallback;
         import com.google.android.gms.wearable.DataApi;
         import com.google.android.gms.wearable.DataEventBuffer;
         import com.google.android.gms.wearable.MessageApi;
         import com.google.android.gms.wearable.MessageEvent;
+        import com.google.android.gms.wearable.Node;
+        import com.google.android.gms.wearable.Wearable;
 
         import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends Activity implements SensorEventListener, MessageApi.MessageListener {
+public class MainActivity extends Activity implements SensorEventListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -25,9 +31,14 @@ public class MainActivity extends Activity implements SensorEventListener, Messa
     private TextView accuracy;
     private TextView sensorInformation;
     private static final int SENSOR_TYPE_HEARTRATE = 65562;
+    private static final String HEART_RATE_PATH = "/update/heartrate";
+
     private Sensor mHeartRateSensor;
     private SensorManager mSensorManager;
     private CountDownLatch latch;
+    private Node node;
+
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,34 @@ public class MainActivity extends Activity implements SensorEventListener, Messa
         super.onStart();
 
         mSensorManager.registerListener(this, this.mHeartRateSensor, 3);
+        initClient();
+
+        mGoogleApiClient.connect();
+    }
+
+    protected void initClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+
+                    @Override
+                    public void onConnected(Bundle connectionHint) {
+                        Log.d(TAG, "onConnected: " + connectionHint);
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int cause) {
+                        Log.d(TAG, "onConnectionSuspended: " + cause);
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult result) {
+                        Log.d(TAG, "onConnectionFailed: " + result);
+                    }
+                })
+                .addApi(Wearable.API)
+                .build();
+
     }
 
     @Override
@@ -70,6 +109,7 @@ public class MainActivity extends Activity implements SensorEventListener, Messa
                 rate.setText(String.valueOf(sensorEvent.values[0]));
                 accuracy.setText("Accuracy: "+sensorEvent.accuracy);
                 sensorInformation.setText(sensorEvent.sensor.toString());
+                sendPulse(Float.toString(sensorEvent.values[0]));
             }
 
         } catch (InterruptedException e) {
@@ -90,12 +130,22 @@ public class MainActivity extends Activity implements SensorEventListener, Messa
         mSensorManager.unregisterListener(this);
     }
 
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals("test")) {
-//            Intent startIntent = new Intent(this, MainActivity.class);
-//            startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(startIntent);
-        }
+    protected void sendPulse(String pulse) {
+        Log.d(TAG, "Trying to send pulse " + pulse);
+
+        PendingResult<MessageApi.SendMessageResult> result = Wearable.MessageApi.sendMessage(
+                mGoogleApiClient, HEART_RATE_PATH, pulse, null);
+
+        result.setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+            @Override
+            public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+                if (!sendMessageResult.getStatus().isSuccess()) {
+                    Log.e(TAG, "ERROR: failed to send Message: " + sendMessageResult.getStatus());
+                } else {
+                    Log.d(TAG, "Success!");
+                }
+            }
+        });
+
     }
 }
