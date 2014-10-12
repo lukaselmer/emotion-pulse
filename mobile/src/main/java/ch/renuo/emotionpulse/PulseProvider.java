@@ -83,7 +83,7 @@ public class PulseProvider implements MessageApi.MessageListener {
 //            }
 //        });
         try {
-            rate = Math.max(Math.min(rate + (pulseSensor.nextInt(3)-1), 196), 73);
+            rate = Math.max(Math.min(rate + (pulseSensor.nextInt(5)-2), 196), 73);
         } catch (Exception ex) {
             rate = 90;
         }
