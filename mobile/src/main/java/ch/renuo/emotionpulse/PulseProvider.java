@@ -20,6 +20,8 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.Random;
+
 /**
  * Created by digi on 10/11/14.
  */
@@ -31,12 +33,12 @@ public class PulseProvider implements MessageApi.MessageListener {
 
     private static final String TAG = "PulseSource";
     private GoogleApiClient mGoogleApiClient;
-    private Node node;
+    private Random pulseSensor;
     private Context context;
 
     private static final String HEART_RATE_PATH = "/update/heartrate";
 
-    private int rate = 10;
+    private int rate = 89;
 
 
     public PulseProvider(Context context) {
@@ -44,6 +46,7 @@ public class PulseProvider implements MessageApi.MessageListener {
         initClient();
         Log.d(QUERY_PULSE_PATH, "Created PulseSource");
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
+        this.pulseSensor = new Random();
     }
 
     protected Context getContext() {
@@ -89,6 +92,7 @@ public class PulseProvider implements MessageApi.MessageListener {
 //            }
 //        });
 
+        rate = rate + (pulseSensor.nextInt(3)-1);
         return rate;
     }
 
