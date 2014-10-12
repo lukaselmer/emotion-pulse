@@ -9,6 +9,7 @@ android {
         applicationId "ch.renuo.emotionpulse"
         minSdkVersion 20
         targetSdkVersion 20
+
         versionCode 1
         versionName "1.0"
     }
